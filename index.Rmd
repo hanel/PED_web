@@ -12,7 +12,7 @@ Stránky studentských prezentací ze zimního semestru 2017/2018, 5. ročník E
 
 Ukázka využití interaktivních knihoven pro zobrazování časových řad. ...
 
-#### [Eva Zvonarova](ez.html)
+#### [Slavomír Filín](sf.html)
 
 ![](img/jp.png)
 
