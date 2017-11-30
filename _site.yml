@@ -8,6 +8,8 @@ navbar:
     href: info.html
   - text: Prezentace
     menu:
+    - text: Valentina Badashkeeva
+      href: vb.html 
     - text: Eliska Obdrzalkova
       href: EO.html
     - text: Eva Zvonarova
