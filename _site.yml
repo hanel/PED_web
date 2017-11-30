@@ -8,18 +8,9 @@ navbar:
     href: info.html
   - text: Prezentace
     menu:
-    - text: Valentina Badashkeeva
-      href: vb.html 
-    - text: Eliska Obdrzalkova
-      href: EO.html
-    - text: Eva Zvonarova
-      href: ez.html
-    - text: Barbora Kalinová
-      href: bk.html
-    - text: Michal Predota
-      href: mp.html
-    - text: Yannis Markonis
-      href: ym.html
+    - text: Slavomír Filín
+      href: sf.html 
+   
 output_dir: docs
 output:
   html_document:
