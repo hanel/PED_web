@@ -2,4 +2,44 @@
 title: "prezentace_TM"
 output: html_document
 ---
-# načtení dat průtoků
+# načtení dat průtoků,sraážek....
+setwd("C:/Users/tohon/Desktop/prezentace_ENV_dat")
+dta  = read.csv2('data_tm.csv',header = FALSE, sep = ";")
+
+# pojmenování jednotlivých veličin
+colnames(dta) = c("Y","M","D","P","E","Q","Tmax","Tmin")
+head(dta)
+
+# vytvoření datumů
+DTM <- seq(from = as.Date(paste(dta$Y[1],
+                                dta$M[1],
+                                dta$D[1],
+                                sep = '-')),
+           by = 'day',
+           length.out = dim(dta)[1])
+dta <- cbind(DTM, dta)
+head(dta)
+
+dta$M <- NULL
+dta$D <- NULL
+colnames(dta) = c("DTM","ID_rok","P","E","Q","Tmax","Tmin")
+head(dta)
+
+
+# vytvoření tabulky pro roky 1950 - 1960
+roky <- c(1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960)
+dekady <- list()
+for(i in 1:length(roky)) {
+  dekada <- seq(from = as.Date(paste0(roky[i],'-01-01')),
+                by = 'day',
+                to = as.Date(paste0(roky[i],'-12-31')))
+  dekady[[i]] <- dta[dta$DTM %in% dekada,]
+}
+dta_dec <- data.table(do.call(rbind, dekady))
+
+# selekce jednotlivých roků
+
+rok1950 = dta_dec[which(dta_dec$ID_rok==1950),]
+
+
+
