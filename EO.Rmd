@@ -1,15 +1,50 @@
 ---
-title: "EO"
+title: "Hydrotechnické posouzení vodního toku Zákolanský potok."
+author: "Eliška Obdržálková"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
+library(data.table)
+library(leaflet)
+library(DT)
 ```
 
-## R Markdown
+## Zájmové území
+Cílem této práce je posouzení hydrotechnického stavu úseku vodního toku Záolanského potoka vymezeného katastrálním územím obce Noutonice. Zákolanský potok vtéká na území obce na ř. km 13,653 mezi chatovými osadami Colorado a Višňovka. Území Noutonic poté opouští nedaleko za viaduktem u Nového mlýna na ř.km 12,182.
 
-pokus1
+```{r} 
+
+locations = data.table(
+  lng = c(14.25979,14.2618719), lat = c(50.16805,50.17272),
+  labels = c("ř.km 13.653", "ř.km 12.182"))
+leaflet() %>% setView(lng = 14.26, lat = 50.17, zoom = 14) %>% addTiles() %>%
+      addMarkers(lat = locations$lat, lng = locations$lng, label = locations$labels)
+```
+
+
+## Stávající stav
+### objekty na toku
+```{r}
+obj = read.csv2(file = "objekty.csv")
+datatable(obj,options = list(pageLength = 5))
+```
+
+
+
+
+### záplavové čáry
+
+
+
+
+
+
+# R Markdown
+## Eli
+
+### pokus1
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
