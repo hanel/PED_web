@@ -8,7 +8,7 @@ navbar:
     href: info.html
   - text: Prezentace
     menu:
-    - text: Jan Petr
+    - text: Tomas Mach
       href: jp.html
     - text: Barbora Kalinová
       href: bk.html
