@@ -29,58 +29,6 @@ krovak <- '+init=epsg:5513'
 wgs84 <- '+init=epsg:4326'
 
 
-toky <- readOGR("dib_A02_Vodni_tok_JU/A02_Vodni_tok_JU.shp", layer = "A02_Vodni_tok_JU")
-Zakol = subset(toky, toky$TOK_ID %in% c(  "138040000100"))
-Zakol@proj4string <- CRS(krovak)
-Zakol_wgs <- spTransform(Zakol,CRS(wgs84))
-
-leaflet(data = Zakol_wgs) %>% addTiles() %>% 
-  addPolylines(color = "blue", weight = 2)
-
-
-
-kilometraz <- readOGR("dib_A12_Kilometraz_1km/A12_Kilometraz_1km.shp", layer = "A12_Kilometraz_1km")
-Zakol_km = subset(kilometraz,kilometraz$TOK_ID %in% c(138040000100))
-Zakol_km@proj4string <- CRS(krovak)
-km_wgs <- spTransform(Zakol_km,CRS(wgs84))
-
-leaflet(data = km_wgs) %>% addTiles() %>% 
-    addCircleMarkers(radius = 1,color = "red")
-
-
-
-
-stanice = readOGR("dib_E04_Vodomerne_stanice/E04_Vodomerne_stanice.shp", layer = "E04_Vodomerne_stanice")
-
-ZC_5 = readOGR("dib_D01_ZaplUzemi5Vody/D01_ZaplUzemi5Vody.shp", layer = "D01_ZaplUzemi5Vody")
-Zakol_ZC = subset(ZC_5,ZC_5$TOK_ID %in% c("138040000100"))
-
-
-Zakol_ZC@proj4string <- CRS(krovak)
-ZC_wgs <- spTransform(Zakol_ZC,CRS(wgs84))
-
-
-
-
-locations = data.table(
-  lng = c(14.25979,14.2618719), lat = c(50.16805,50.17272),
-  labels = c("ř.km 13.653", "ř.km 12.182"))
-
-leaflet() %>% setView(lng = 14.26, lat = 50.17, zoom = 14) %>% addTiles() %>%
-  addMarkers(lat = locations$lat, lng = locations$lng, label = locations$labels) 
-
-leaflet(data = ZC_wgs) %>% addTiles() %>% #setView(lng = -744798.926  , lat = -1036166.155, zoom = 14) %>%
-  addPolygons(color = "red",label = "ZAPLAVA", fill = TRUE, fillColor = "red", weight = 20, opacity = 1, fillOpacity = 0.5)
-
-leaflet(data = Zakolansky) %>% addLayersControl(mapa,overlayGroups = c("Zakolansky"))
-mapa
-
-
-
-
-mapStates = map("state", fill = TRUE, plot = FALSE)
-leaflet(data = mapStates) %>% addTiles() %>%
-  addPolygons(fillColor = topo.colors(10, alpha = NULL), stroke = FALSE)
 
 ```
 
