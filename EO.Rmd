@@ -13,7 +13,7 @@ library(rgdal)
 library(rgeos)
 library(maptools)
 library(sp)
-library(maps)
+# library(maps)
 
 library(raster) # prace s rastry
 library(ggplot2)  # efektivni nastroj pro tvorbu grafu
@@ -30,6 +30,26 @@ jdiojfidosf
 krovak <- '+init=epsg:5513'
 wgs84 <- '+init=epsg:4326'
 
+Zakol <- readOGR("SHP/tok/Zakol_tok.shp", layer = "Zakol_tok")
+Zakol@proj4string <- CRS(krovak)
+Zakol_wgs <- spTransform(Zakol,CRS(wgs84))
+
+kilometraz <- readOGR("SHP/dib_A12_Kilometraz_1km/A12_Kilometraz_1km.shp", layer = "A12_Kilometraz_1km")
+Zakol_km = subset(kilometraz,kilometraz$TOK_ID %in% c(138040000100))
+Zakol_km@proj4string <- CRS(krovak)
+km_wgs <- spTransform(Zakol_km,CRS(wgs84))
+
+Zakol_ZU_5 <- readOGR("SHP/ZU_5/Zakol_ZU_5.shp", layer = "Zakol_ZU_5")
+Zakol_ZU_5@proj4string <- CRS(krovak)
+Zakol_ZU_5_wgs <- spTransform(Zakol_ZU_5,CRS(wgs84))
+
+
+
+
+leaflet() %>% addTiles() %>% 
+  addPolylines(data = Zakol_wgs, color = "blue", weight = 2) %>% 
+    addCircleMarkers(data = km_wgs,radius = 1,color = "red") %>%
+  addPolygons(data = Zakol_ZU_5_wgs,color = "red",label = "ZAPLAVA")
 
 
 ```
