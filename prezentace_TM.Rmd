@@ -2,15 +2,23 @@
 title: "prezentace_TM"
 output: html_document
 ---
-# načtení dat průtoků,sraážek....
+# PREZENTACE ENVIRONMENTÁLNÍCH DAT
+## Obsah
+1. načtení dat, vytvoření datumů, selekce dekády 1950 - 1960
+2. Vytvoření ggplot pro vykreslení všech veličin
+3. Vytvoření hydrogramů pro jednotlivé roky
+4. Tabulka popisné statistiky pro jednotlivé roky
+
+
+### načtení dat průtoků,sraážek....
 setwd("C:/Users/tohon/Desktop/prezentace_ENV_dat")
 dta  = read.csv2('data_tm.csv',header = FALSE, sep = ";")
 
-# pojmenování jednotlivých veličin
+### pojmenování jednotlivých veličin
 colnames(dta) = c("Y","M","D","P","E","Q","Tmax","Tmin")
 head(dta)
 
-# vytvoření datumů
+### vytvoření datumů
 DTM <- seq(from = as.Date(paste(dta$Y[1],
                                 dta$M[1],
                                 dta$D[1],
@@ -26,7 +34,7 @@ colnames(dta) = c("DTM","ID_rok","P","E","Q","Tmax","Tmin")
 head(dta)
 
 
-# vytvoření tabulky pro roky 1950 - 1960
+### vytvoření tabulky pro roky 1950 - 1960
 roky <- c(1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960)
 dekady <- list()
 for(i in 1:length(roky)) {
@@ -37,9 +45,37 @@ for(i in 1:length(roky)) {
 }
 dta_dec <- data.table(do.call(rbind, dekady))
 
-# selekce jednotlivých roků
+### selekce jednotlivých roků
+
 
 rok1950 = dta_dec[which(dta_dec$ID_rok==1950),]
+Q = dta_dec$Q
+P = dta_dec$P
+DTM = dta_dec$DTM
+E = dta_dec$E
+ID_rok = dta_dec$ID_rok
+Tmax = dta_dec$Tmax
+Tmin = dta_dec$Tmin
+
+### graf všechn veličin pro celou dekádu
+ggplot(data = rok1950) + 
+  geom_line(aes(x = DTM, y = Q), col = 'green',show.legend = TRUE) +
+  geom_line(aes(x = DTM, y = P), col = "blue",show.legend = TRUE)+
+  geom_line(aes(x = DTM, y = E),col = "black",show.legend = TRUE)+
+  geom_line(aes(x = DTM, y = Tmax),col = "red",show.legend = TRUE)+
+  geom_line(aes(x = DTM, y = Tmin),col = "orange",show.legend = TRUE)+
+  labs(x = "Datum",y = "pozorované veličiny",title = "Graf pozorovaných veličin")+
+  theme(legend.position = "topright")+
+scale_color_gradient2()
+
+### graf průtoků pro rok 1950
+ggplot(data = dta_dec) + 
+  geom_line(aes(x = DTM, y = Q), col = 'green',show.legend = TRUE) +
+  labs(x = "Datum",y = "pozorované veličiny",title = "Graf pozorovaných veličin")+
+  theme(legend.position = "topright")+
+  facet_wrap(~ID_rok,scales = "free")+
+scale_color_gradient2()
+
 
 
 
