@@ -20,9 +20,7 @@ Ukázka využití interaktivních knihoven pro zobrazování časových řad. ..
 
 #### [Eliska Obdrzalkova](EO.html)
 
-![](img/jp.png)
-
-blablalblalballablablaa
+Záplavové území Zákolanského potoka pro průtoky Q5.
 
 #### [Michal Predota](mp.html)
 

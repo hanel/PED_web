@@ -10,17 +10,8 @@ library(data.table)
 library(leaflet)
 library(DT)
 library(rgdal)
-library(rgeos)
-library(maptools)
-library(sp)
-# library(maps)
-
-library(raster) # prace s rastry
-library(ggplot2)  # efektivni nastroj pro tvorbu grafu
-library(gtools)
-library(gridExtra)
 ```
-## úvod
+## Úvod
 Zákolanský potok se nachází ve Středočeském kraji na pomezí Kladenska a Prahy-západ a ústí do Vltavy ve městě Kralupy nad Vltavou. Tok prochází relativně rovnou, intenzivně zemědělsky obhospodařovanou krajinou. Důsledkem opakovaného poškozování nešetrnými melioračními zásahy v minulosti je odtok z povodí zrychlený, což bývá příčinou častých záplav v okolních obcích.
 
 ## Biologické poměry na toku
@@ -30,7 +21,7 @@ Rak kamenáč se považuje za evropsky významný druh díky čemuž je Zákolan
 ## Zájmové území
 Cílem diplomové práce bude stanovení záplavových území a posouzení hydrotechnického stavu vodního toku Zákolanský potok v úseku vymezeného katastrálním územím obce Noutonice. Zákolanský potok vtéká na území obce na ř. km 13,653 mezi chatovými osadami Colorado a Višňovka. Území Noutonic poté opouští nedaleko za viaduktem u Nového mlýna na ř.km 12,182. 
 
-### objekty na toku
+### Objekty na toku
 Na toku se v řešeném úseku vyskytuje 12 objektů uvedených v tabulce převzaté z Technicko-provozní dokumentace povodí Vltavy. Objekt L30 je však již v dnešní době nahrazen mostkem a v jeho okolí bylo provedeno haťování břehů.
 
 ```{r}
