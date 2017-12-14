@@ -45,7 +45,7 @@ library(data.table)
 library(rgdal)
 library(dplyr)
 
-locations = data.table(lat = c(15.35340,15.34678, 15.34632),lng = c(50.23787,50.23864,50.23848),labels = c("KH + NPK","NEOSOL + NPK", "NPK"))
+locations = data.table(lat = c(15.34540,15.34678, 15.34632),lng = c(50.23787,50.23864,50.23848),labels = c("KH + NPK","NEOSOL + NPK", "NPK"))
 
 mapovani <- leaflet() %>%
   addTiles() %>%
@@ -59,8 +59,9 @@ mapovani  # Print the map
 
 
 Měření probíhalo na laboratorním permeametru. 
-
-Aby se zapříčinilo výskytu vzduchu v pórech museli se prvky nejptve postupně sytit (3-4 dny). Po nasycení vzorků probíhalo samotné měření, které v každé sérii mělo 3 opakování, aby bylo možné sledovat časovou proměnlivost samotné Ks. 
+Aby se zapříčinilo výskytu vzduchu v pórech museli se prvky nejptve postupně sytit (3-4 dny). 
+Po nasycení vzorků probíhalo samotné měření, které v každé sérii mělo 3 opakování, aby bylo možné sledovat časovou proměnlivost samotné Ks.
+Samotné měření v každé sérii probíhalo 48 hodin.
 
 
 # Výsledky měření Ks 
