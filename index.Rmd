@@ -12,13 +12,6 @@ Stránky studentských prezentací ze zimního semestru 2017/2018, 5. ročník E
 
 Ukázka využití interaktivních knihoven pro zobrazování časových řad. ...
 
-#### [Eva Zvonarova](ez.html)
-
-![](img/jp.png)
-
-Ukázka využití interaktivních knihoven pro zobrazování časových řad. ...
-
-
 #### [Tomas Mach](jp.html)
 ![](img/jp.png)
 
@@ -31,10 +24,8 @@ blablalblalballablablaa
 
 blablalblalballablablaa
 
-#### [Michal Predota](mp.html)
+#### [Michal Předota](mp.html)
 
-![](img/jp.png)
+![](img/lokace.jpg)
 
-blablalblalballablabla
-
-
+Tato práce pojednává o datech, která jsou potřeba k sestavení 1D modelu pro modelování ustáleného proudění na úseku Novosedelského potoka pomocí sofwaru HEC-RAS. Představení zájmového území a prezentace získaných dat pro diplomovou práci "Stanovení záplavových čar pro průchod N-letých průtoků na vybraném úseku toku Novosedelský potok".
