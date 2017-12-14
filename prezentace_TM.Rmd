@@ -1,6 +1,8 @@
 ---
 title: "prezentace_TM"
 output: html_document
+runtime: shiny
+
 ---
 # PREZENTACE ENVIRONMENTÁLNÍCH DAT
 ## Obsah
@@ -11,14 +13,30 @@ output: html_document
 
 
 ### načtení dat průtoků,sraážek....
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
+
+library(data.table)
 setwd("C:/Users/tohon/Desktop/prezentace_ENV_dat")
+knitr:: opts_chunk$set(cache.path = getwd())
 dta  = read.csv2('data_tm.csv',header = FALSE, sep = ";")
 
+```
+
 ### pojmenování jednotlivých veličin
+```{r,echo=FALSE}
+library(data.table)
 colnames(dta) = c("Y","M","D","P","E","Q","Tmax","Tmin")
+
+
+```
+```{r}
+library(data.table)
 head(dta)
+```
 
 ### vytvoření datumů
+```{r,echo=FALSE}
+library(data.table)
 DTM <- seq(from = as.Date(paste(dta$Y[1],
                                 dta$M[1],
                                 dta$D[1],
@@ -26,15 +44,29 @@ DTM <- seq(from = as.Date(paste(dta$Y[1],
            by = 'day',
            length.out = dim(dta)[1])
 dta <- cbind(DTM, dta)
-head(dta)
 
+```
+```{r}
+library(data.table)
+head(dta)
+```
+
+```{r,echo=FALSE}
+library(data.table)
 dta$M <- NULL
 dta$D <- NULL
 colnames(dta) = c("DTM","ID_rok","P","E","Q","Tmax","Tmin")
+
+```
+```{r}
+library(data.table)
 head(dta)
+```
 
 
 ### vytvoření tabulky pro roky 1950 - 1960
+```{r, echo=FALSE}
+library(data.table)
 roky <- c(1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960)
 dekady <- list()
 for(i in 1:length(roky)) {
@@ -44,11 +76,28 @@ for(i in 1:length(roky)) {
   dekady[[i]] <- dta[dta$DTM %in% dekada,]
 }
 dta_dec <- data.table(do.call(rbind, dekady))
+```
+
+```{r}
+library(data.table)
+head(dta_dec)
+```
+
 
 ### selekce jednotlivých roků
-
-
+```{r,echo = FALSE}
+library(data.table)
 rok1950 = dta_dec[which(dta_dec$ID_rok==1950),]
+rok1951 = dta_dec[which(dta_dec$ID_rok==1951),]
+rok1952 = dta_dec[which(dta_dec$ID_rok==1952),]
+rok1953 = dta_dec[which(dta_dec$ID_rok==1953),]
+rok1954 = dta_dec[which(dta_dec$ID_rok==1954),]
+rok1955 = dta_dec[which(dta_dec$ID_rok==1955),]
+rok1956 = dta_dec[which(dta_dec$ID_rok==1956),]
+rok1957 = dta_dec[which(dta_dec$ID_rok==1957),]
+rok1958 = dta_dec[which(dta_dec$ID_rok==1958),]
+rok1959 = dta_dec[which(dta_dec$ID_rok==1959),]
+rok1960 = dta_dec[which(dta_dec$ID_rok==1960),]
 Q = dta_dec$Q
 P = dta_dec$P
 DTM = dta_dec$DTM
@@ -56,9 +105,14 @@ E = dta_dec$E
 ID_rok = dta_dec$ID_rok
 Tmax = dta_dec$Tmax
 Tmin = dta_dec$Tmin
+```
 
 ### graf všechn veličin pro celou dekádu
-ggplot(data = rok1950) + 
+```{r}
+library(ggplot2)
+library(data.table)
+library(plotly)
+graf_1 = (ggplot(data = rok1951) + 
   geom_line(aes(x = DTM, y = Q), col = 'green',show.legend = TRUE) +
   geom_line(aes(x = DTM, y = P), col = "blue",show.legend = TRUE)+
   geom_line(aes(x = DTM, y = E),col = "black",show.legend = TRUE)+
@@ -66,16 +120,126 @@ ggplot(data = rok1950) +
   geom_line(aes(x = DTM, y = Tmin),col = "orange",show.legend = TRUE)+
   labs(x = "Datum",y = "pozorované veličiny",title = "Graf pozorovaných veličin")+
   theme(legend.position = "topright")+
-scale_color_gradient2()
+scale_color_gradient2())
+ggplotly(graf_1)
+```
 
 ### graf průtoků pro rok 1950
-ggplot(data = dta_dec) + 
+
+```{r}
+library(ggplot2)
+library(data.table)
+library(plotly)
+graf_2 = (ggplot(data = dta_dec) + 
   geom_line(aes(x = DTM, y = Q), col = 'green',show.legend = TRUE) +
   labs(x = "Datum",y = "pozorované veličiny",title = "Graf pozorovaných veličin")+
   theme(legend.position = "topright")+
   facet_wrap(~ID_rok,scales = "free")+
-scale_color_gradient2()
+scale_color_gradient2())
+ggplotly(graf_2)
+```
 
+### Tabulka popisné statistiky
+```{r}
+library(data.table)
+stat = function (x) {
+  static = data.table(prumer = mean(x),smerodatna_odchylka = sd(x))
+  return(static)
+}
+
+rok1950$DTM = NULL
+rok1950$ID_rok = NULL
+stat(Q)
+dta_dec[,mean(Q),by = year(DTM)]
+dta_dec[,mean(P),by = year(DTM)]
+tom = data.table(cbind(Roky = c(1950:1960),Q = dta_dec[,mean(Q),by = year(DTM)]))
+colnames(tom) = c("roky","Q","p")
+head(tom)
+```
+```{r}
+library(shiny)
+library(ggplot2)
+library(data.table)
+library(dygraphs)
+library(leaflet)
+
+setwd("C:/Users/tohon/Desktop/prezentace_ENV_dat")
+data  = read.csv2('data_tm.csv',header = FALSE, sep = ";")
+
+
+colnames(data) = c("Y","M","D","P","E","Q","Tmax","Tmin")
+head(data)
+
+
+DTM <- seq(from = as.Date(paste(data$Y[1],
+                                data$M[1],
+                                data$D[1],
+                                sep = '-')),
+           by = 'day',
+           length.out = dim(data)[1])
+data <- cbind(DTM, data)
+head(data)
+
+data$M <- NULL
+data$D <- NULL
+colnames(data) = c("DTM","ID_rok","P","E","Q","Tmax","Tmin")
+head(data)
+
+roky <- c(1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960)
+dekady <- list()
+for(i in 1:length(roky)) {
+  dekada <- seq(from = as.Date(paste0(roky[i],'-01-01')),
+                by = 'day',
+                to = as.Date(paste0(roky[i],'-12-31')))
+  dekady[[i]] <- data[data$DTM %in% dekada,]
+}
+data_dec <- data.table(do.call(rbind, dekady))
+data_dec = data.table(data_dec)
+data_dec$ID_rok = as.factor(data_dec$ID_rok)
+
+locations = data.table(
+  lng = c(14.59, 13.19, 16.05, 15.71, 14.83), lat = c(48.72, 50.22, 48.94, 49.61, 50.03),
+  labels = c("Hradiště", "Mětikalov", "Plaveč", "Stříbrné Hory", "Tuchoraz"))
+
+ui <- fluidPage(
+  fluidRow(column(4,
+      selectInput("variable", "Variable", colnames(data_dec)[!(colnames(data_dec) %in% c("DTM", "ID_rok"))]),
+      checkboxGroupInput("catchments", "Catchments:", levels(data_dec$ID_rok), selected = levels(data_dec$ID_rok)[1])),
+    column(8,
+      plotOutput("plot", click = "plot_click"),
+      verbatimTextOutput("plot_clicked_points"))),
+  fluidRow(dygraphOutput("dyplot")),
+  fluidRow(leafletOutput("map"))
+)
+
+server <- function(input, output) {
+  data_dec_to_plot <- reactive({
+    data_dec[ID_rok %in% input$catchments]
+  })
+  
+  output$map <- renderLeaflet({
+    leaflet() %>% setView(lng = 15, lat = 50, zoom = 7) %>% addTiles()  %>% 
+      addMarkers(lat = locations$lat, lng =locations$lng, label = locations$labels)
+  })    
+  
+  output$dyplot <- renderDygraph({
+    dygraph(dcast(data_dec_to_plot(), "DTM ~ ID_rok", value.var = input$variable)) %>%
+      dyRangeSelector()
+  })  
+
+  output$plot <- renderPlot({
+    return(ggplot(data_dec_to_plot(), aes_string(x = "DTM", y = input$variable, color = "ID_rok"))
+      + geom_line() + scale_colour_brewer(palette = "Set1"))
+  })  
+  
+  output$plot_clicked_points <- renderPrint({
+    nearPoints(data_dec_to_plot(), input$plot_click)
+  })  
+}
+
+shinyApp(ui = ui, server = server)
+
+```
 
 
 
