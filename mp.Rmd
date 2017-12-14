@@ -47,7 +47,6 @@ m  # Print the map
 ```
 
 <br>
-<br>
 
 # 3. Potřebná data k sestavení 1D modelu
 
@@ -60,7 +59,6 @@ m  # Print the map
 ![](img/TIN.jpg)
 
 #### Obr. 1 Vytvořená vrstva TIN
-<br>
 <br>
 
 ### 3.1.2 Příčné profily a objekty na toku
@@ -85,7 +83,6 @@ plot_ly(P52,x = ~staniceni,linetype="l", color = I("black"))%>%
 
 
 ```
-<br>
 
 #### Obr. 2 Příčný profil P52 (ř.km 7,431)
 <br>
@@ -109,11 +106,9 @@ plot_ly(O1,x = ~staniceni,linetype="l", color = I("black"))%>%
   add_trace(y = ~nadmorska_vyska,name="objekt",color = I("black"))
 
 ```
-<br>
 
 #### Obr. 3 Objekt na toku O1 (ř.km 0,134)
 
-<br>
 <br>
 
 ### 3.1.3 Podkladová mapa ZM10
@@ -123,7 +118,6 @@ plot_ly(O1,x = ~staniceni,linetype="l", color = I("black"))%>%
 ![](img/ZM10.jpg)
 
 #### Obr. 4 Výřez ze základní mapy měřítka 1:10000
-<br>
 <br>
 
 ## 3.2 Hydrologická data
@@ -141,7 +135,6 @@ data.table(N,Qn_zacatek,Qn_konec)
 ```
 #### Tab. 1 N-leté průtoky na začátku a na konci úseku
 
-<br>
 <br>
 
 ## 3.3 Hydraulická data
