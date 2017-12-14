@@ -3,6 +3,14 @@ title: "MP"
 output: html_document
 ---
 
+# 1. HEC-RAS
+- nejrozšířenější volně dostupný software, [download](http://www.hec.usace.army.mil/software/hec-ras/downloads.aspx)
+- slouží k 1D, 2D i 3D simulaci proudění povrchové vody
+- ustálené a neustálené proudění, transport sedimentů, analýza kvality a teploty vody
+- modelování celé oblasti nebo jen vybraného úseku
+- pro výpočet je nutné zahrnout i překážky na toku (jezy, mosty,...)
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
