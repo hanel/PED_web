@@ -1,28 +1,199 @@
 ---
-title: "SF"
-output: html_document
+title: "Vyzualizace casovych rad 2007-2010 a 2013-2016"
+author: "Slavomir Filin"
+date: "14.12.2017"
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+###Data som použil z: 
+https://wrcc.dri.edu/wraws/
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+![](https://upload.wikimedia.org/wikipedia/commons/1/1c/Drought_area_in_California.svg)
 
-```{r cars}
-summary(cars)
+
+![Rok 2011 a 2014](http://csglobe.com/wp-content/uploads/2015/05/California-will-run-out-of-water-very-soon.jpg)
+
+###Meteo Stanice Pilot Hill 
+```{r}
+library(leaflet)
+m <- leaflet() %>%
+  addTiles() %>%  
+  addMarkers(lng=-121.068, lat=39.2041, popup="The birthplace of R")
+m  
+setwd("D:/dokumenty/skola/5.roc/prezentace")
+library(data.table)
+library(ggplot2)
+library(dygraphs)
+library(plotly)
+dta= read.csv("pilot_hill.csv",sep=";", header = F)
+dta2= read.csv("pilot_hill2.csv",sep=";", header = F)
+head(dta2)
+head(dta)
+colnames(dta)[c(1,2,3,4,5,6,7,8,9)] <- c("ID", "P13","D13","P14","D14","P15","D15","P16","D16")
+colnames(dta2)[c(1,2,3,4,5,6,7,8)] <- c("D6","P6","D7","P7","D8","P8","D9","P9")
+DTM13=dta$D13
+e13 <- DTM13
+e13_date <-as.Date(as.character(e13),  format = "%d.%m.%Y")
+DTM14=dta$D14
+e14 <- DTM14
+e14_date <-as.Date(as.character(e14),  format = "%d.%m.%Y")
+DTM15=dta$D15
+e15 <- DTM15
+e15_date <-as.Date(as.character(e15),  format = "%d.%m.%Y")
+DTM16=dta$D16
+e16 <- DTM16
+e16_date <-as.Date(as.character(e16),  format = "%d.%m.%Y")
+DTM6=dta2$D6
+e6 <- DTM6
+e6_date <-as.Date(as.character(e6),  format = "%d.%m.%Y")
+DTM7=dta2$D7
+e7 <- DTM7
+e7_date <-as.Date(as.character(e7),  format = "%d.%m.%Y")
+DTM8=dta2$D8
+e8 <- DTM8
+e8_date <-as.Date(as.character(e8),  format = "%d.%m.%Y")
+DTM9=dta2$D9
+e9 <- DTM9
+e9_date <-as.Date(as.character(e9),  format = "%d.%m.%Y")
+DATA2=data.frame(e6_date,dta2$P6,e7_date,dta2$P7,e8_date,dta2$P8,e9_date,dta2$P9)
+colnames(DATA2)[c(1,2,3,4,5,6,7,8)] <- c("D6","P6","D7","P7","D8","P8","D9","P9")
+head(DATA2)
+DATA=data.frame(e13_date,dta$P13,e14_date,dta$P14,e15_date,dta$P15,e16_date,dta$P16)
+colnames(DATA)[c(1,2,3,4,5,6,7,8)] <- c("D13","P13","D14","P14","D15","P15","D16","P16")
+head(DATA)
+DAZD13=data.table(DATA$P13,DATA$D13)
+DAZD14=data.table(DATA$P14,DATA$D14)
+DAZD15=data.table(DATA$P15,DATA$D15)
+DAZD16=data.table(DATA$P16,DATA$D16)
+DAZD6=data.table(DATA2$P6,DATA2$D6)
+DAZD7=data.table(DATA2$P7,DATA2$D7)
+DAZD8=data.table(DATA2$P8,DATA2$D8)
+DAZD9=data.table(DATA2$P9,DATA2$D9)
+dat6=DAZD6[, V1, by=(V2)]
+dat6=data.frame(c(1:365),dat6$V1)
+colnames(dat6)[c(1,2)] <- c("den","P")
+sum6=DAZD6[, sum(V1), by=year(V2)]
+sum6=sum(sum6$V1,na.rm=TRUE)
+dygraph(dat6, main = "Precip. Pilot Hill station  California 2007") %>% 
+  dyRangeSelector(dateWindow = c("1", "365"))
+sum6
+dat7=DAZD7[, V1, by=(V2)]
+dat7=data.frame(c(1:365),dat7$V1)
+colnames(dat7)[c(1,2)] <- c("den","P")
+sum7=DAZD7[, sum(V1), by=year(V2)]
+sum7=sum(sum7$V1,na.rm=TRUE)
+dygraph(dat7, main = "Precip Pilot Hill station  California 2008") %>% 
+  dyRangeSelector(dateWindow = c("1", "366"))
+sum7
+dat8=DAZD8[, V1, by=(V2)]
+dat8=data.frame(c(1:365),dat8$V1)
+colnames(dat8)[c(1,2)] <- c("den","P")
+sum8=DAZD8[, sum(V1), by=year(V2)]
+sum8=sum(sum8$V1,na.rm=TRUE)
+dygraph(dat8, main = "Precip. Pilot Hill station  California 2009") %>% 
+  dyRangeSelector(dateWindow = c("1", "365"))
+sum8
+dat9=DAZD9[, V1, by=(V2)]
+dat9=data.frame(c(1:365),dat9$V1)
+colnames(dat9)[c(1,2)] <- c("den","P")
+sum9=DAZD9[, sum(V1), by=year(V2)]
+sum9=sum(sum9$V1,na.rm=TRUE)
+dygraph(dat9, main = "Precip. Pilot Hill station  California 2010") %>% 
+  dyRangeSelector(dateWindow = c("1", "366"))
+sum9
 ```
+###Porovnanie grafov
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+setwd("D:/dokumenty/skola/5.roc/prezentace")
+plot(dat6,type="l",xlab="DAY 1-365",ylab ="P(mm)",ylim=c(0,3.6),main=("Precip. rok 2007-2010")) 
+lines(dat7,col="red")
+lines(dat8,col="green")
+lines(dat9,col="blue")
+PP=ggplot() + 
+  geom_line(data=DATA2, aes(x =D6, y = P6), color = "red") +
+  geom_line(data=DATA2, aes(x =D7, y = P7), color = "black") +
+  geom_line(data=DATA2, aes(x =D8, y = P8), color = "blue") +
+  geom_line(data=DATA2, aes(x =D9, y = P9), color = "green") +
+  ggtitle("Precip. 2007-2010 (Pilot Hill Station California US)")+
+  xlab("Rok")+ylab("P (mm)")
+PP
+ggplotly(PP)
+dat13=DAZD13[, V1, by=(V2)]
+dat13=data.frame(c(1:366),dat13$V1)
+colnames(dat13)[c(1,2)] <- c("den","P")
+sum13=DAZD13[, sum(V1), by=year(V2)]
+sum13=sum(sum13$V1,na.rm=TRUE)
+dygraph(dat13, main = "Precip Pilot Hill station  California 2013") %>% 
+  dyRangeSelector(dateWindow = c("1", "366"))
+sum13
+dat14=DAZD14[, V1, by=(V2)]
+dat14=data.frame(c(1:366),dat14$V1)
+colnames(dat14)[c(1,2)] <- c("den","P")
+sum14=DAZD14[, sum(V1), by=year(V2)]
+sum14=sum(sum14$V1,na.rm=TRUE)
+dygraph(dat14, main = "Precip. Pilot Hill station  California 2014") %>% 
+  dyRangeSelector(dateWindow = c("1", "366"))
+sum14
+dat15=DAZD15[, V1, by=(V2)]
+dat15=data.frame(c(1:366),dat15$V1)
+colnames(dat15)[c(1,2)] <- c("den","P")
+sum15=DAZD15[, sum(V1), by=year(V2)]
+dygraph(dat15, main = "Precip. Pilot Hill station  California 2015") %>% 
+  dyRangeSelector(dateWindow = c("1", "366"))
+sum(sum15$V1,na.rm=TRUE)
+dat16=DAZD16[, V1, by=(V2)]
+dat16=data.frame(c(1:366),dat16$V1)
+colnames(dat16)[c(1,2)] <- c("den","P")
+sum16=DAZD16[, sum(V1), by=year(V2)]
+dygraph(dat16, main = "Precip Pilot Hill station  California 2016") %>% 
+  dyRangeSelector(dateWindow = c("1", "366"))
+sum(sum16$V1,na.rm=TRUE)
+plot(dat13,type="l",xlab=("DAY 1-365"),ylab ="P(mm)",ylim=c(0,120),main=("Precip. rok 2013-2016")) 
+lines(dat14,col="red")
+lines(dat15,col="green")
+lines(dat16,col="blue")
+PPP=ggplot() + 
+  geom_line(data=DATA, aes(x =D13, y = P13), color = "red") +
+  geom_line(data=DATA, aes(x =D14, y = P14), color = "black") +
+  geom_line(data=DATA, aes(x =D15, y = P15), color = "blue") +
+  geom_line(data=DATA, aes(x =D16, y = P16), color = "green") +
+  ggtitle("Precip. 2012-2016 (Pilot Hill Station California US)")+
+  xlab("Rok")+ylab("P (mm)")
+PPP
+ggplotly(PPP)
 ```
+###Grafy teplotných rozdielov 
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+setwd("D:/dokumenty/skola/5.roc/prezentace")
+temp2= read.csv("dataNOAA.csv",sep=";", header = F)
+temp= read.csv("dataNOAA2.csv",sep=";", header = F)
+temp2_D=temp2$V11
+temp2_e <- temp2_D
+temp2_date <-as.Date(as.character(temp2_e),  format = "%d.%m.%Y")
+temp_D=temp$V1
+temp_e <- temp_D
+temp_date <-as.Date(as.character(temp_e),  format = "%d.%m.%Y")
+TEMP2=data.frame(temp2_date,temp2$V13)
+colnames(TEMP2)[c(1,2)] <- c("Date","T")
+teplota2=data.frame(c(1:1461),temp2$V13)
+TEMP=data.frame(temp_date,temp$V4)
+colnames(TEMP)[c(1,2)] <- c("Date","T")
+teplota=data.frame(c(1:1491),temp$V4)
+dygraph(teplota2, main = "TEPLOTA Pilot Hill station  California 2007-2010") %>% 
+  dyRangeSelector(dateWindow = c("1", "1491"))
+M0609=data.table(temp2$V13)
+mean(M0609$V1,na.rm=TRUE)
+dygraph(teplota, main = "TEPLOTA Pilot Hill station  California 2013-2016") %>% 
+  dyRangeSelector(dateWindow = c("1", "1491"))
+M1216=data.table(temp$V4)
+mean(M1216$V1,na.rm=TRUE)
+```

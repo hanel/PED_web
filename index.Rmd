@@ -10,11 +10,12 @@ Stránky studentských prezentací ze zimního semestru 2017/2018, 5. ročník E
 
 ![](img/jp.png)
 
-Ukázka využití interaktivních knihoven pro zobrazování časových řad. ...
+Vizualizace casovych rad 2007-2010 a 2013-2016. 
 
-#### [Slavomír Filín](sf.html)
+#### [Slavomir Filin](sf.html)
 
-![](img/jp.png)
+![](img/drought.png)
+
 
 Ukázka využití interaktivních knihoven pro zobrazování časových řad. ...
 

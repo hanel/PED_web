@@ -4,19 +4,17 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: Zadání
+  - text: ZadĂˇnĂ­
     href: info.html
   - text: Prezentace
     menu:
-    - text: Slavomír Filín
-      href: sf.html 
-   
+    - text: Slavomir Filin
+      href: sf.html
 output_dir: docs
 output:
   html_document:
-    css: 'style.css'
+    css: style.css
     theme: united
     lib_dir: site_libs
     self_contained: no
-    
 
