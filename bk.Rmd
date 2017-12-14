@@ -5,25 +5,105 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+library(rmarkdown)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Nasycená hydraulická vodivost
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Jedná se o veličinu charakterizující proudění kapaliny porézním prostředím. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+![](img/Ks.jpg)
 
-```{r cars}
-summary(cars)
+
+## NEOSOL
+Přípravek na bázi dolomiteckého vápence, organických látek a rostlinného pojiva.
+
+Hlavním složením přípravku je __CaO__ (28 %), __MgO__ (15,9 %).  Hodnota pH se pohybuje cca od 8 - 10. 
+
+
+Tím, že se NEOSOL přimíchá do půdy, mělo by to mít za následek zlepšení fyzikálních vlastností půdy. Půda by tedy měla tvořit lepší půdní agregáty a tím by měla lépe zadržovat vodu, tudíž by měla být úrodnější.
+
+Během pokusů, které byly provedeny se zatím kladné vlastnosti NEOSOLU neobjevily. Při uchování vzorků se zjistilo, že NEOSOL tvoří agregáty s velmi ostrými hranami a agregáty jsou tak pevné, že nejdou oddělit. Na vzorcích z oblasti, která je hnojena NEOSOLEM se objevují příznaky cementace.
+
+# Měření Ks
+Vzorky byly odebrány 16.8. 2017 na pomezí Středočeského a Královehradeckého kraje, v obci Sloveč. Odběry se prováděli na jednom poli, které je rozděleno do několika sektorů podle způsobu hnojení. 
+
+Měření nasycené hydraulické vodivosti probíhalo ve třech sériích měřeních na laboratorním permeametru. V každé sérii byly obsaženy vzorky ze 3. odběrových oblastí:
+- KH + NPK
+- NEOSOL + NPK
+- NPK
+
+
+
+
+
+```{r pressure, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(leaflet)
+library(data.table)
+library(rgdal)
+library(dplyr)
+
+locations = data.table(lat = c(15.34540,15.34678, 15.34632),lng = c(50.23787,50.23864,50.23848),labels = c("KH + NPK","NEOSOL + NPK", "NPK"))
+
+mapovani <- leaflet() %>%
+  addTiles() %>%
+  addMarkers(locations$lat, locations$lng, popup=locations$labels)
+mapovani  # Print the map
+
+
+
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+Měření probíhalo na laboratorním permeametru. 
+Aby se zapříčinilo výskytu vzduchu v pórech museli se prvky nejptve postupně sytit (3-4 dny). 
+Po nasycení vzorků probíhalo samotné měření, které v každé sérii mělo 3 opakování, aby bylo možné sledovat časovou proměnlivost samotné Ks.
+Samotné měření v každé sérii probíhalo 48 hodin.
+
+
+# Výsledky měření Ks 
+
+```{r, echo=FALSE,message=FALSE, warning=FALSE}
+library(data.table)
+
+x = c(rep ('kravský hnůj + NPK',8), rep('NEOSOL + NPK', 9), rep('NPK', 8) )
+y = c(4.49E-07, NA,4.41E-07, NA, 8.97E-07,1.94E-06, 2.54298E-06,NA,
+      4.86E-05,2.50E-03, 9.51E-03,2.92E-03,1.34E-05,1.70E-06, 3.46E-03, 0.000375197,3.53814E-06,
+    9.64e-05,3.47e-03,9.02e-04,4.78e-03,1.04e-03,2.37e-04,7.95684e-07,0.002513803)
+z = c(6,8,20,1,23,11,17,24,12,2,13,22 ,3,16,5,10 ,4,18, 19,14,7,21,9,71,15)
+
+dta = data.table (x, y, z)
+setnames(dta, old = c('x','y', 'z'), new = c('Odberové oblasti','Hodnoty Ks [cm/s]', 'Cisla vzorku'))
+
+library(knitr)
+kable(dta[1:25], caption = 'Výsledné hodnoty Ks')
+
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r pressure2, echo=FALSE, message=FALSE, warning=FALSE}
+
+library(ggplot2)
+library (plotly)
+
+x = c(rep ('kravský hnůj + NPK',8), rep('NEOSOL + NPK', 9), rep('NPK', 8) )
+y = c(4.49E-07, NA,4.41E-07, NA, 8.97E-07,1.94E-06, 2.54298E-06,NA,
+      4.86E-05,2.50E-03, 9.51E-03,2.92E-03,1.34E-05,1.70E-06, 3.46E-03, 0.000375197,3.53814E-06,
+    9.64e-05,3.47e-03,9.02e-04,4.78e-03,1.04e-03,2.37e-04,7.95684e-07,0.002513803)
+z = c(6,8,20,1,23,11,17,24,12,2,13,22 ,3,16,5,10 ,4,18, 19,14,7,21,9,71,15)
+
+dta = data.table (x, y, z)
+
+
+
+g = ggplot(dta) + geom_point(aes(x=x, y=y, col='red')) + labs( x = 'vybrané oblasti', y = 'Hodnoty Ks', title = 'Nasycené hydraulické vodivosti vybraných oblastí') 
+
+ggplotly(g)
+
+```
+
+
