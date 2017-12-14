@@ -17,6 +17,7 @@ Ukázka využití interaktivních knihoven pro zobrazování časových řad. ..
 
 #### [Michal Predota](mp.html)
 
-![](img/jp.png)
+![](img/lokace.jpg)
 
-blablalblalballablabla
+Tato práce pojednává o datech, která jsou potřeba k sestavení 1D modelu pro modelování ustáleného proudění na úseku Novosedelského potoka pomocí sofwaru HEC-RAS. Představení zájmového území a prezentace získaných dat pro diplomovou práci "Stanovení záplavových čar pro průchod N-letých průtoků na vybraném úseku toku Novosedelský potok".
+
