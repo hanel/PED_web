@@ -4,8 +4,6 @@ title: 'Prezentace environmentálních dat 2017/2018'
 
 Stránky studentských prezentací ze zimního semestru 2017/2018, 5. ročník Environmentální modelování
 
-
-
 ## Abstrakty
 
 #### [Jan Petr](jp.html)
@@ -14,11 +12,20 @@ Stránky studentských prezentací ze zimního semestru 2017/2018, 5. ročník E
 
 Ukázka využití interaktivních knihoven pro zobrazování časových řad. ...
 
-<br>
+#### [Tomas Mach](jp.html)
+![](img/jp.png)
+
+blablalblalballablablaa
+
+
+#### [Eliska Obdrzalkova](EO.html)
+
+![](img/jp.png)
+
+blablalblalballablablaa
 
 #### [Michal Předota](mp.html)
 
 ![](img/lokace.jpg)
 
 Tato práce pojednává o datech, která jsou potřeba k sestavení 1D modelu pro modelování ustáleného proudění na úseku Novosedelského potoka pomocí sofwaru HEC-RAS. Představení zájmového území a prezentace získaných dat pro diplomovou práci "Stanovení záplavových čar pro průchod N-letých průtoků na vybraném úseku toku Novosedelský potok".
-
