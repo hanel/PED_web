@@ -35,7 +35,7 @@ locations = data.table(lat = c(13.8331408,13.7590475),lng = c(49.2686678,49.2509
 krovak = "+init=epsg:5513"
 wgs84 = "+init=epsg:4326"
 
-tok <- readOGR("docs/shp/Tok.shp", layer = "Tok")
+tok <- readOGR("docs/data/Tok.shp", layer = "Tok")
 
 tok@proj4string = CRS(krovak)
 tok_wgs = spTransform(tok,CRS(wgs84))
