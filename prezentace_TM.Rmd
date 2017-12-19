@@ -1,18 +1,48 @@
 ---
-title: "prezentace_TM"
+title: "PREZENTACE ENVIRONMENTÁLNÍCH DAT"
 output: html_document
 runtime: shiny
 
 ---
-# PREZENTACE ENVIRONMENTÁLNÍCH DAT
-## Obsah
-1. načtení dat, vytvoření datumů, selekce dekády 1950 - 1960
-2. Vytvoření ggplot pro vykreslení všech veličin
-3. Vytvoření hydrogramů pro jednotlivé roky
-4. Tabulka popisné statistiky pro jednotlivé roky
+
+# Využití hydrologického modelu HEC-HMS pro predikci maximálních odtoků z povodí
+## Tomáš Mach, ENV,II. ročník
+### Obsah
+1. Cíle Diplomové práce
+2. Získání potřebných dat a jejich vizualizace
+3. Popis zájmového území
+4. Sestavení Srážko-odtokového modelu v HEC-HMS
+5. Závěr - kalibrace, porovnání výsledků
 
 
-### načtení dat průtoků,sraážek....
+### Diplomová práce
+1. Cíle Diplomové práce
+
+* Cílem práce je vytvoření srážko-odtokového modelu v programu HEC-HMS
+* Model bude situovám na vyhodnocení extrémních odtoků z povodí, povodňových vln 
+* Simulované odtoky z jednotlivých modelů budou kalibrovány na měřené hodnoty ve vodoměrné stanici Tajanov
+
+2. Získání potřebných dat a jejich vizualizace
+
+2.1 Hydrologická data
+
+* Časové řady srážek v hodinovém kroku pro rok 2013 jako vstupy do modelu ze stanic Libkov, Nýrsko, Strážov
+* Časové řady průtoků v hodinovém kroku pro rok 2013 jako data potřebná pro kalibraci modelu ze stanice Tajanov
++    Pozn. data budou poskytnuta od ČHMÚ
+
+##### [Zobrazení vodoměrných a srážkoměrných stanic](stanic.html)
+
+![](img/stanic.png)
+
+2.2 Topologická data
+
+* data od ČÚZK pro vytvoření DMT - Digitálního modelu terénu
+* Digitální model reliéfu České republiky 5. generace bude nezbytný jako výchozí podklad pro zpracování DTM v Arcmapu
+* DMT 5G představuje zobrazení přirozeného nebo lidskou činností upravenéhozemského povrchu v digitálním tvaru ve formě výšek diskrétních bodů  o souřadnicích X,Y,H, kde H reprezentuje nadmořskou výšku ve výškovém referenčním systému Balt po vyrovnání
+* DIBAVOD data, která poskytují mapovou informací o říční síti v ČR, rozvodnicích, jednotlivých povodích
+
+
+###### Načtení dat
 ```{r,echo=FALSE,warning=FALSE,message=FALSE}
 
 library(data.table)
@@ -22,20 +52,20 @@ dta  = read.csv2('data_tm.csv',header = FALSE, sep = ";")
 
 ```
 
-### pojmenování jednotlivých veličin
-```{r,echo=FALSE}
+###### Pojmenování jednotlivých veličin
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(data.table)
 colnames(dta) = c("Y","M","D","P","E","Q","Tmax","Tmin")
 
 
 ```
-```{r}
+```{r,warning=FALSE,message=FALSE}
 library(data.table)
 head(dta)
 ```
 
-### vytvoření datumů
-```{r,echo=FALSE}
+###### Vytvoření datumů
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(data.table)
 DTM <- seq(from = as.Date(paste(dta$Y[1],
                                 dta$M[1],
@@ -46,26 +76,26 @@ DTM <- seq(from = as.Date(paste(dta$Y[1],
 dta <- cbind(DTM, dta)
 
 ```
-```{r}
+```{r,warning=FALSE,message=FALSE}
 library(data.table)
 head(dta)
 ```
 
-```{r,echo=FALSE}
+```{r,echo=FALSE,warning=FALSE,message=FALSE}
 library(data.table)
 dta$M <- NULL
 dta$D <- NULL
 colnames(dta) = c("DTM","ID_rok","P","E","Q","Tmax","Tmin")
 
 ```
-```{r}
+```{r,warning=FALSE,message=FALSE}
 library(data.table)
 head(dta)
 ```
 
 
-### vytvoření tabulky pro roky 1950 - 1960
-```{r, echo=FALSE}
+###### vytvoření tabulky pro roky 1950 - 1960
+```{r, echo=FALSE,warning=FALSE,message=FALSE}
 library(data.table)
 roky <- c(1950,1951,1952,1953,1954,1955,1956,1957,1958,1959,1960)
 dekady <- list()
@@ -78,14 +108,14 @@ for(i in 1:length(roky)) {
 dta_dec <- data.table(do.call(rbind, dekady))
 ```
 
-```{r}
+```{r,warning=FALSE,message=FALSE}
 library(data.table)
 head(dta_dec)
 ```
 
 
-### selekce jednotlivých roků
-```{r,echo = FALSE}
+
+```{r,echo = FALSE,warning=FALSE,message=FALSE}
 library(data.table)
 rok1950 = dta_dec[which(dta_dec$ID_rok==1950),]
 rok1951 = dta_dec[which(dta_dec$ID_rok==1951),]
@@ -107,26 +137,35 @@ Tmax = dta_dec$Tmax
 Tmin = dta_dec$Tmin
 ```
 
-### graf všechn veličin pro celou dekádu
-```{r}
+###### Graf zobrazující závislost průtoků Q na čase
+```{r,warning=FALSE,message=FALSE}
 library(ggplot2)
 library(data.table)
 library(plotly)
-graf_1 = (ggplot(data = rok1951) + 
+graf_1 = (ggplot(data = dta_dec) + 
   geom_line(aes(x = DTM, y = Q), col = 'green',show.legend = TRUE) +
-  geom_line(aes(x = DTM, y = P), col = "blue",show.legend = TRUE)+
-  geom_line(aes(x = DTM, y = E),col = "black",show.legend = TRUE)+
-  geom_line(aes(x = DTM, y = Tmax),col = "red",show.legend = TRUE)+
-  geom_line(aes(x = DTM, y = Tmin),col = "orange",show.legend = TRUE)+
-  labs(x = "Datum",y = "pozorované veličiny",title = "Graf pozorovaných veličin")+
+  labs(x = "Datum",y = "Průtok - Q",title = "Graf pozorovaných veličin")+
   theme(legend.position = "topright")+
 scale_color_gradient2())
 ggplotly(graf_1)
 ```
 
-### graf průtoků pro rok 1950
+###### Graf zobrazující závislost srážek P na čase
+```{r,warning=FALSE,message=FALSE}
+library(ggplot2)
+library(data.table)
+library(plotly)
+graf_1 = (ggplot(data = dta_dec) + 
+  geom_line(aes(x = DTM, y = P), col = "blue",show.legend = TRUE)+
+  labs(x = "Datum",y = "Srážky - P",title = "Graf pozorovaných veličin")+
+  theme(legend.position = "topright")+
+scale_color_gradient2())
+ggplotly(graf_1)
+```
 
-```{r}
+###### Graf zobrazující průtoky v čase pro rok 1950-1960 po jednotlivých rocích
+
+```{r,warning=FALSE,message=FALSE}
 library(ggplot2)
 library(data.table)
 library(plotly)
@@ -139,24 +178,50 @@ scale_color_gradient2())
 ggplotly(graf_2)
 ```
 
-### Tabulka popisné statistiky
-```{r}
-library(data.table)
-stat = function (x) {
-  static = data.table(prumer = mean(x),smerodatna_odchylka = sd(x))
-  return(static)
-}
+3. Popis zájmového území 
 
-rok1950$DTM = NULL
-rok1950$ID_rok = NULL
-stat(Q)
-dta_dec[,mean(Q),by = year(DTM)]
-dta_dec[,mean(P),by = year(DTM)]
-tom = data.table(cbind(Roky = c(1950:1960),Q = dta_dec[,mean(Q),by = year(DTM)]))
-colnames(tom) = c("roky","Q","p")
-head(tom)
+* Řešené území se nachází mezi městy Klatovy a Nýrsko, kterými protéká řeka Úhlava. Povodí Úhlavy je povodí 3. řádu, která dále spadá pod povodí 2. řádu - Berounky a povodí 1. řádu - Vltavy
+* Konkrétní řešené území má rozlohu cca 50 km2 a obvod přes 40 km, úzávěrový profil povodí se nachází v místě vodoměrné stanice Tajanov, pro zjištění vstupních dat - srážek bude nezbytné vyhodnotit pomocí ideální metody rozložení srážek ze všech 3 srážkoměrných stanic
+
+##### [Zobrazení povodí zájmového území](uzemi.html)
+
+![](img/uzemi.png)
+
+
+
+###### Tabulka popisné statistiky
+```{r,echo = FALSE,warning=FALSE,message=FALSE}
+
+
+
+tom = data.table(cbind(Roky = c(1950:1960),Q_p = dta_dec[,mean(Q),by = year(DTM)]),P_p = dta_dec[,mean(P),by = year(DTM)],Q_sd = dta_dec[,sd(Q),by = year(DTM)],
+P_sd = dta_dec[,sd(P),by = year(DTM)],
+Q_max = dta_dec[,max(Q),by = year(DTM)],
+P_man = dta_dec[,max(P),by = year(DTM)],
+Q_min = dta_dec[,max(Q),by = year(DTM)],
+P_min = dta_dec[,max(P),by = year(DTM)])
+
+tom$Q_p.year = NULL
+tom$P_p.year = NULL
+tom$Q_sd.year = NULL
+tom$P_sd.year = NULL
+tom$Q_max.year = NULL
+tom$P_max.year = NULL
+tom$Q_min.year = NULL
+tom$P_min.year = NULL
+tom$P_man.year = NULL
+colnames(tom) = c("roky","Q_průměr","p_průměr","Q_sm_odchylka","P_sm_odchylka","Q_max","P_max","Q_min","P_min")
+
+popis_stat = data.table(tom)
+
 ```
-```{r}
+```{r,warning=FALSE,message=FALSE}
+popis_stat
+```
+
+
+###### Shiny aplikace zobrazující jednotlivé veličiny v závoslisti na čase s mapou jednotlivých stanic
+```{r,warning=FALSE,message=FALSE}
 library(shiny)
 library(ggplot2)
 library(data.table)
@@ -198,7 +263,7 @@ data_dec = data.table(data_dec)
 data_dec$ID_rok = as.factor(data_dec$ID_rok)
 
 locations = data.table(
-  lng = c(14.59, 13.19, 16.05, 15.71, 14.83), lat = c(48.72, 50.22, 48.94, 49.61, 50.03),
+  lng = c(13.13,  13.14,13.24, 13.26 ), lat = c(49.36, 49.29, 49.30,49.40),
   labels = c("Hradiště", "Mětikalov", "Plaveč", "Stříbrné Hory", "Tuchoraz"))
 
 ui <- fluidPage(
@@ -240,6 +305,25 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 
 ```
+
+4. Sestavení Srážko-odtokového modelu v HEC-HMS
+
+* Srážkoodtokový model popisuje řešené území pomocí schematizace v podobě jeho rozdělení na dílčí povodí a zadání jejich parametrů.
+*Software HEC-HMS umožňuje řešené území rozdělit na dílčí povodí („Subbasin“) vzájemně propojená úseky vodních toků vodních toků („Reach“) a jejich soutoků („Junction“).
+* Dílčí povodí mají určité vstupní hodnoty - Plocha povodí, úhrn efektivní srážky, transformaci ef. srážky  - jednotkový hydrogram, základní odtok
+* Úseky vodních toků - mezi parametry zadávané do výpočtu patří tvar koryta, drsnost koryta dle Manninga, délka a sklon úseku toku - určení pomocí nástrojů ARCGIS, drsnost - místní šetření
+
+##### [Zobrazení povodí zájmového území](model.html)
+
+![](img/model.png)
+
+5. Závěr - kalibrace, porovnání výsledků
+
+* Na závěr je třeba vyhodnotit, který z modelů se nejvíce přibližuje měřeným datům, konkrétně v tomto případě průtokům. Je proto třeba provést určitou optimalizaci parametrů modelu - kalibraci a dojít k požadovanému výsledků.
+
+
+
+
 
 
 

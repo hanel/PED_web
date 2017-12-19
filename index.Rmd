@@ -17,3 +17,5 @@ Ukázka využití interaktivních knihoven pro zobrazování časových řad. ..
 
 
 #### [Tomas Mach](jp.html)
+
+* Tato Diplomová práce na téma Využití hydrologického modelu HEC-HMS pro predikci maximálních odtoků z povodí spočívá v sestavení srážko-odpotokového modelu v programu HEC-HMS s použitím programuz ArcGis pro vytvoření DTM a dalších mapových podkladů a v následné kalibraci jednotlivých situlací - vyhodnocení a porovnání simulivaných a měřených dat
